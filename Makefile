@@ -1,7 +1,7 @@
-# Set this to one or more main LaTeX files (e.g. those with \documentclass) 
+# Set this to one or more main LaTeX files (e.g. those with \documentclass)
 # for a specific build. Leave blank to build all files having an uncommented
 # \documentclass.
-MAIN=paper.tex
+MAIN=auto-re.tex data-management-plan.tex collaboration-plan.tex personnel.tex collaborators.tex
 
 
 ###########################################################################
@@ -13,7 +13,7 @@ MAIN=paper.tex
 #
 # This is the PDFLATEX makefile, no support for ps/eps/dvi.
 #
-# Originally based on 
+# Originally based on
 #   http://www.acoustics.hut.fi/u/mairas/UltimateLatexMakefile/Makefile
 # but redeveloped by JG. Reuse by changing just the first line to list
 # the main LaTeX source file.
@@ -28,7 +28,7 @@ MAIN=paper.tex
 # - Works for files with bibliographies, and files without.
 
 ifndef MAIN
-MAIN:=	$(shell egrep -l "^[^%]*\documentclass" *.tex)	
+MAIN:=	$(shell egrep -l "^[^%]*\documentclass" *.tex)
 endif
 
 ALLTEX:=$(shell ls *.tex)
@@ -74,14 +74,15 @@ double:
 	for i in $(ALLTEX); do echo "Double words in $$i:" && ./double.pl < $$i; done
 
 clean:
-	rm -f *~ *.log *.aux *.dvi *.bbl *.blg *.cb *.dep *-diff.tex $(TARGET)
+	rm -f *~ *.log *.aux *.dvi *.bbl *.blg *.cb *.dep *-diff.tex *.out $(TARGET)
 
 die_unsupported:
 	$(warning Unsupported Makefile build target. Supported targets are:)
 	$(warning  <BLANK> all pdf $(TARGET) clean)
 	$(error Exiting)
 
-LATEX=	pdflatex #--interaction batchmode
+#LATEX=	pdflatex #--interaction batchmode
+LATEX= xelatex
 TARGET=	$(MAIN:.tex=.pdf)
 
 # 9 Dec 2008 JG: This is now a worklist algorithm to pick up all recursive

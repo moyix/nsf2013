@@ -1,0 +1,170 @@
+\documentclass[letterpaper,twoside,11pt,headings=small]{scrartcl}
+
+\PassOptionsToPackage{hang,small}{caption}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{subfig}
+\usepackage{fancyvrb}
+\usepackage{booktabs}
+\usepackage{chappg}
+\usepackage{xspace}
+\usepackage{scrpage2}
+\usepackage{pgf,tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\usepackage{ulem}
+\normalem
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\defaultfontfeatures{Mapping=tex-text}
+\setromanfont[Ligatures={TeX}]{Times New Roman}
+\setsansfont[Ligatures={TeX}]{Helvetica Neue}
+\setmonofont[Scale=MatchLowercase]{Menlo}
+
+\newcommand{\thetitle}{TWC: Medium: TITLE\xspace}
+\renewcommand{\paragraph}[1]{{\sffamily\textbf{#1}}~}
+\newcommand{\challenge}[1]{\paragraph{Research Challenge:} \emph{#1}}
+
+\pagestyle{scrheadings}
+\clearscrheadfoot
+\lohead{NSF 13-578 --- Secure and Trustworthy Cyberspace}
+\rohead{\pagemark}
+\lehead{\thetitle}
+\rehead{\pagemark}
+\setheadsepline{0.5pt}
+\setfootsepline{0pt}
+\setkomafont{pageheadfoot}{\sffamily\fontsize{9}{9}\selectfont}
+\setkomafont{pagenumber}{\sffamily\fontsize{9}{9}\selectfont}
+
+\usepackage[unicode,bookmarks,colorlinks,breaklinks,pdftitle={},pdfauthor={}]{hyperref}
+\hypersetup{linkcolor=black,citecolor=black,filecolor=black,urlcolor=black}
+
+\begin{document}
+
+\pagenumbering[B]{bychapter}
+
+{\sffamily\bfseries
+\begin{center}
+\fontsize{16}{16}\selectfont Project Summary
+
+\fontsize{13}{13}\selectfont \thetitle
+\end{center}
+\label{sec:summary}
+}
+
+\paragraph{Intellectual Merit.}
+
+\paragraph{Broader Impacts.}
+
+\newpage
+\pagenumbering[D]{bychapter}
+\setcounter{page}{1}
+
+{\sffamily\bfseries
+\begin{center}
+\fontsize{16}{16}\selectfont Project Description
+
+\fontsize{13}{13}\selectfont \thetitle
+\end{center}
+\label{sec:summary}
+}
+
+\section{Research Overview}
+\label{sec:overview}
+
+\subsection{Project Goals and Scope}
+\label{sec:overview:goals}
+
+\subsection{Embedded Firmware Emulation}
+\label{sec:overview:firmware}
+
+\challenge{CHALLENGE}
+
+\challenge{CHALLENGE}
+
+\challenge{CHALLENGE}
+
+\subsection{Structural Decomposition}
+\label{sec:overview:structure}
+
+\challenge{CHALLENGE}
+
+\challenge{CHALLENGE}
+
+\challenge{CHALLENGE}
+
+\subsection{Mitigating Software Backdoors}
+\label{sec:overview:backdoors}
+
+\challenge{CHALLENGE}
+
+\challenge{CHALLENGE}
+
+\challenge{CHALLENGE}
+
+\subsection{Encrypted Protocol Fuzzing}
+\label{sec:overview:fuzzing}
+
+\challenge{CHALLENGE}
+
+\challenge{CHALLENGE}
+
+\challenge{CHALLENGE}
+
+\subsection{Outcomes and Deliverables}
+\label{sec:overview:outcomes}
+
+\section{State of the Art and Previous Work}
+\label{sec:related}
+
+\section{Embedded Firmware Emulation}
+\label{sec:research:firmware}
+
+\section{Structural Decomposition}
+\label{sec:research:structure}
+
+\section{Mitigating Software Backdoors}
+\label{sec:research:backdoors}
+
+\section{Encrypted Protocol Fuzzing}
+\label{sec:research:fuzzing}
+
+\section{Broader Impact and Educational Outreach}
+\label{sec:impact}
+
+\subsection{Curriculum Development}
+\label{sec:impact:curriculum}
+
+\subsection{Education and Outreach}
+\label{sec:impact:education}
+
+\subsection{Technology Transfer and Dissemination}
+\label{sec:impact:tech-transfer}
+
+\section{Project Time Plan}
+\label{sec:time-plan}
+
+\paragraph{Year 1.}
+
+\paragraph{Year 2.}
+
+\paragraph{Year 3.}
+
+\section{Qualifications of the PIs and Previous NSF Support}
+\label{sec:qualifications}
+
+\newpage
+\pagenumbering[E]{bychapter}
+\setcounter{page}{1}
+\bibliographystyle{acm}
+\bibliography{satc}
+
+\newpage
+\pagenumbering[J]{bychapter}
+\setcounter{page}{1}
+\setcounter{section}{0}
+
+\end{document}
