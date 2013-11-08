@@ -23,9 +23,12 @@
 \setromanfont[Ligatures={TeX}]{Times New Roman}
 \setsansfont[Ligatures={TeX}]{Helvetica Neue}
 \setmonofont[Scale=MatchLowercase]{Menlo}
+\usepackage{todonotes}
+\usepackage{paralist}
 
-\newcommand{\thetitle}{TWC: Medium: TITLE\xspace}
-\renewcommand{\paragraph}[1]{{\sffamily\textbf{#1}}~}
+\newcommand{\basetitle}{TWC: Medium: Automated Reverse Engineering of Commodity Software}
+\newcommand{\thetitle}{\basetitle\xspace}
+\newcommand{\dynamicsys}{\textsc{DynamicSystem}\xspace}
 \newcommand{\challenge}[1]{\paragraph{Research Challenge:} \emph{#1}}
 
 \pagestyle{scrheadings}
@@ -39,7 +42,7 @@
 \setkomafont{pageheadfoot}{\sffamily\fontsize{9}{9}\selectfont}
 \setkomafont{pagenumber}{\sffamily\fontsize{9}{9}\selectfont}
 
-\usepackage[unicode,bookmarks,colorlinks,breaklinks,pdftitle={},pdfauthor={}]{hyperref}
+\usepackage[unicode,bookmarks,colorlinks,breaklinks,pdftitle={\basetitle},pdfauthor={}]{hyperref}
 \hypersetup{linkcolor=black,citecolor=black,filecolor=black,urlcolor=black}
 
 \begin{document}
@@ -55,9 +58,64 @@
 \label{sec:summary}
 }
 
-\paragraph{Intellectual Merit.}
+Software, including common examples such as commercial applications or
+embedded device firmware, is often delivered as closed-source binaries.  While
+prior academic work has examined how to automatically discover vulnerabilities
+in binary software, and even how to automatically craft exploits for these
+vulnerabilities, answering basic security-relevant questions about
+closed-source software remains difficult.  For instance, ideally one would like to
+know whether software contains malicious functionality; whether it contains
+obfuscated code or protocols indicative of malicious behavior; what security
+properties does this software intend to provide; and, whether one can
+recognize when software is deviating from normal, intended behavior at
+runtime.
 
-\paragraph{Broader Impacts.}
+This project aims to provide algorithms and tools for answering these questions.
+Leveraging prior work on emulator-based dynamic analyses, we propose techniques
+for scaling this high-fidelity analysis to capture and extract whole-system
+behavior in the context of embedded device firmware.  Using a combination of
+dynamic execution traces collected from this analysis platform and binary code
+analysis techniques, we propose techniques for automated structural analysis of
+closed-source software, decomposing system and user-level programs into logical
+modules through inference of high-level semantic behavior.  This decomposition
+provides as output an automatically learned description of the interfaces and
+information flows between each module at a sub-program granularity.
+
+Using emulation-based dynamic analysis and structural decomposition as a
+foundation, we will develop specific applications of this framework for
+whole-system understanding.  As one application, we propose techniques for
+automated detection and mitigation of software backdoors in embedded devices
+such as SOHO routers, a recent example of which is the backdoor discovered in
+the D-Link DIR-100 rev.~A broadband router~\cite{heffner:dlink-dir100}.
+
+As a second application of our framework for whole-system understanding, we
+propose techniques for automating the reverse engineering of encrypted network
+protocols commonly used by malware to obfuscate their communication with
+command-and-control servers.
+
+\todo[inline]{Expand introduction.}
+
+\paragraph{Intellectual Merit.} Reverse engineering is a critical capability
+for understanding and responding to software-borne threats, and can enable
+deep system understanding towards automated hardening of existing
+closed-source platforms.  However, reverse engineering currently entails the training
+of highly-skilled security professionals, as well as significant manual
+effort, both processes that do not scale to meet the current needs of industry
+and government.  The automated techniques and tools we will develop in the
+course of this research will lay the groundwork for meeting this need, as well
+as enable new automatic hardening and threat response capabilities.
+
+\paragraph{Broader Impacts.} The research proposed herein will have a
+significant impact outside of the security research community.  We will
+incorporate the research findings of our program into our undergraduate and
+graduate teaching curricula, as well as in extracurricular educational efforts
+such as Capture-the-Flag that have broad outreach in the greater Boston and
+Atlanta metropolitan areas.  The close ties to industry that the collective
+PIs possess will facilitate transitioning the research into practical
+defensive tools that can be deployed into real-world systems and networks. As
+a result, the program will have broad impact on both the training of
+next-generation cybersecurity professionals as well as the advancement of
+defensive tool capabilities in operational environments.
 
 \newpage
 \pagenumbering[D]{bychapter}
@@ -69,7 +127,6 @@
 
 \fontsize{13}{13}\selectfont \thetitle
 \end{center}
-\label{sec:summary}
 }
 
 \section{Research Overview}
@@ -125,6 +182,295 @@
 
 \section{Structural Decomposition}
 \label{sec:research:structure}
+
+\cite{csallner:icse2008:dysy}
+\cite{krka:icsa2010:inference}
+\cite{chipounov:asplos2011:s2e}
+
+% \begin{itemize}
+%     \item Analysis phase
+%         \item Recover module boundaries
+%         \item Learn high-level semantic behavior from execution traces
+%         \item Recover information flows between modules
+%     \item Rewriting phase
+%     \begin{itemize}
+%         \item Detect deviations from learned invariants
+%         \item Harden interfaces between modules
+%     \end{itemize}
+% \end{itemize}
+
+When analyzing software, it is often uncommon to have access to the source
+code of the program of interest.  Manually finding vulnerabilities or
+malicious behavior in binary programs is time-consuming, error-prone, and
+typically requires allocating highly-experienced reverse engineers to the
+task. Therefore, it is desirable to have precise and scalable program analyses
+of native binary executables to discover vulnerabilities or malicious
+components of these programs, render benign applications more resilient to
+known classes of attack, and to deep insight into a system's runtime state.
+Systems like \dynamicsys provide a solid basis for developing analyses of this
+sort.
+
+Given the capability to perform precise static and dynamic data-flow analysis
+on binaries, it becomes possible to answer higher-level questions such as:
+\begin{inparaenum}[i)]
+    \item what are the distinct modules that comprise the program or system,
+    \item what are the interfaces that these modules expose to their environment,
+    \item what are the information flows between these modules, and
+    \item can we characterize the normal behavior of a system in terms of this higher
+        level of abstraction and detect deviations from expected behavior?
+\end{inparaenum}
+
+We propose the development of an advanced, automated binary program analysis
+platform that aims to automatically answer these questions.  Specifically, our
+platform leverages \dynamicsys to identify the modules that comprise a set of
+binary programs, the interfaces they expose, and characterize their structure
+and expected behavior.  The platform leverages \dynamicsys and uses a combination
+of static and dynamic analyses to automatically infer the high-level structure
+and interfaces of large-scale programs for which only the binary -- and the
+ability to execute it -- is given.  A precise and efficient static analysis
+allows the platform to construct reliable control-flow graphs (CFGs) of the
+programs under test.  Whole-system emulation is then used to perform
+fine-grained, instruction-level, dynamic analysis.  The resulting execution
+traces allow the platform to perform advanced data-flow analyses that refine
+the statically-derived CFG.  Using these program analyses, we will then
+extract behavioral models of the program under test that can be compared to a
+\emph{minimal} specification of its expected behavior.  This capability will
+allow our platform to automatically decompose a set of binary executables into
+their constituent logical modules, as well as identify both direct and
+indirect communication channels with other modules and the external
+environment.
+
+The models extracted from a binary program under analysis will then be used as
+input to a runtime monitoring component.  This monitor will periodically
+compare the execution state of the program to invariants encoded in the model,
+allowing for the efficient detection of abnormal deviations from expected
+behavior.  Additionally, the higher-level characterization of program behavior
+learned in the previous phase will allow for better explanatory power in the
+reports generated by the monitor, leading to increased insight into whole
+system behavior on the part of system operators.
+
+The envisioned architecture of our analysis platform is depicted in
+Fig.~\ref{fig:decomposition-arch}.  The approach consists of two logical
+phases.  In the first, the analysis components are applied to a replica of a
+deployed system within an isolated, emulated environment.  From these
+analyses, a model of high-level program structure and legitimate behavior is
+extracted.  This model is then used in the second phase, where a secure
+runtime component checks the execution of the deployed system against the
+model.  Any deviations from this model are indicated in the form of high-level
+alerts to system operators.
+
+In the following, we elaborate upon each of the components of our system for
+system taint analysis and monitoring.
+
+\begin{figure}[t]
+    \centering
+    \missingfigure{Architecture of structural decomposition platform.}
+    \caption{Envisioned architecture of the analysis platform.
+    A combination of static and dynamic analyses are performed on a replica
+    of a deployed system within an isolated, emulated environment.
+    The analyses extract a model of high-level program structure and
+    legitimate behavior that is then used to monitor the state of the
+    deployed system.}
+    \label{fig:decomposition-arch}
+\end{figure}
+
+\subsection{Dynamic Analysis Engine}
+
+The dynamic analysis engine performs its analysis inside of a high-fidelity
+emulated environment based on the \dynamicsys system.  The system monitors the
+activity of programs under test during runtime, and has full visibility into
+the state of the entire machine at an instruction-level granularity.  This
+precision complements the strengths of static analyses; since dynamic analysis
+operates over concrete values, the technique has the significant advantage
+that it can easily handle obfuscated, self-modifying, and concurrent code.  We
+refer the reader to the discussion on \dynamicsys in
+Section~\ref{sec:research:firmware} for more details.
+
+In addition to operation over concrete values, we additionally incorporate
+dynamic symbolic execution over these traces.  Dynamic symbolic execution
+substitutes symbolic values for inputs to individual modules, allowing for
+the identification of new inputs that can be provided to the program under
+test in order to explore previously uncovered code.  This capability relies
+upon the identification of module boundaries and interfaces, which we describe
+in Section~\ref{sec:research:structure:modules}.
+
+The output of the dynamic analysis engine is a set of execution traces
+augmented with data flow information.  These traces completely describe the
+evolution of the state of the program under test with respect to the test
+inputs, its interaction with the environment, and the propagation of data
+through the system.
+
+\subsection{Static Analysis Engine}
+
+The static analysis engine provides a precise and scalable set of analyses
+that operate directly on binary program executables, without the need for
+source code.  Incorporating a robust static analysis component allows our
+platform to achieve high coverage of program behaviors over possible inputs
+without having to actually exercise the program under test on those inputs.
+However, static analysis has well-known deficiencies -- especially with
+respect to binary executables -- that are important to address.
+
+To that end, we will leverage our prior work on static binary analysis. In
+doing so, our platform will be based upon a strong foundation of analyses that
+can handle imprecision at multiple levels, including both disassembly and
+control flow.
+
+\paragraph{Robust disassembly.} A well-known challenge for binary static
+analysis is the difficulty of achieving full coverage of the code contained in
+an executable image. Our prior work has studied techniques for improving the
+robustness of binary disassembly, and we intend to leverage both symbolic
+execution and statistical analysis to that end~\cite{kruegel:sec2004:disasm}.
+The use of a symbolic execution engine allows our disassembler to handle many
+computed jumps that would otherwise be difficult to resolve statically.
+
+Our work also incorporates statistical techniques to probabilistically
+identify likely code regions in binary executables.  An example of this is to
+collect, \emph{a priori}, digram probabilities for pairs of instructions from
+a corpus of known benign programs.  Then, this can be used during disassembly
+to probabilistically identify code regions, or reduce the imprecision
+introduced by a (overly-conservative) widened symbolic jump target.
+
+Malicious code also often utilizes obfuscation techniques to hinder static
+analysis, such as overlapping instruction sequences as seen in variable length
+ISAs such as ix86, or switching between multiple supported ISAs as in the case
+of ARM and the Thumb family of instruction sets.  We will develop techniques
+to handle these classes of obfuscation.
+
+\paragraph{Control-flow subgraph matching.} One capability that is
+particularly useful in several contexts relating to binary static analysis is
+fuzzy control-flow subgraph matching.  Our prior work has demonstrated its
+utility when performing efficient online detection of polymorphic worm
+propagation on the network~\cite{kruegel:raid2005:worm}. We anticipate that
+this capability will be useful in achieving the goal of module identification
+and behavioral characterization.
+
+Our technique for fuzzy control-flow subgraph matching takes two binary CFGs
+as input, where graph nodes and edges represent basic blocks and control flow
+transfers, respectively.  The algorithm colors the graph based on the
+semantics of instructions contained in each basic block, extracts
+$k$-subgraphs for small values of $k$ by computing a spanning tree, and then
+performs fast subgraph matching to determine the overlap between $k$-subgraphs
+from each CFG. By applying abstraction and decomposing the CFGs into
+subgraphs, our matching technique is able to efficiently discover
+semantically-similar CFGs.  We anticipate that this matching technique can
+serve as a robust base upon which to enable module identification.
+
+\subsection{Analysis Capabilities}
+\label{sec:research:structure:modules}
+
+The combination of our proposed static and dynamic analyses for binary
+programs will enable several key capabilities: automated module
+identification, behavioral characterization, interface enumeration, and
+runtime monitoring.
+
+\paragraph{Module identification and characterization.} Our composition of
+program analyses will allow our platform to automatically identify the
+constituent modules of a binary set of programs under test and, in conjunction
+with limited \emph{a priori} domain knowledge of the program, classify each
+module according to its function.  Module identification will proceed by
+iterating between two distinct phases. First, a robust static disassembly and
+context-sensitive control-flow analysis will allow our platform to obtain an
+initial control-flow graph (CFG) of the program. During this phase,
+domain-specific knowledge can be leveraged to statically classify subgraphs of the
+CFG as belonging to particular modules -- e.g., by recognizing the definition
+and use of interrupt vectors specific to a particular machine architecture.
+
+During the second phase, this initial static model will be refined by
+monitoring the runtime behavior of the program under test.  Ambiguities
+resulting from natural limits on the precision of static analysis can be
+resolved by observing program behavior over concrete inputs and applying
+dynamic symbolic execution over the resulting traces.  For instance,
+incomplete coverage of the binary program under test can be improved by
+resolving the targets of statically unknown indirect control flow transfers
+during the dynamic analysis phase.  The dynamic trace analysis will be
+combined with judicious application of novel program invariant inference
+techniques~\cite{ernst:2009:daikon,csallner:icse2008:dysy,krka:icsa2010:inference}.
+By associating code structure with state invariants at critical program
+points, our platform will be capable of recognizing many common program design
+patterns of interest.
+
+Iterating between these two phases will allow the platform to identify control
+flow patterns that correspond to high-level specifications of expected
+behavior defined \emph{a priori} for one or more modules.  For instance, in
+the case where a multitasking real-time operating system (RTOS) is being
+analyzed, one would expect to observe a control transfer as a result of a
+timer interrupt, followed by a deterministic loop over an array or list of
+process descriptors, followed by the resumption of a selected thread of
+control.  Our platform will allow for the specification and matching of such
+high-level patterns of control flows against real binaries and execution
+traces.  In the case that concurrent execution of multiple modules is
+encountered by the platform, domain-specific knowledge will be leveraged for
+the particular machine architecture to isolate and extract traces for each
+distinct thread of execution.
+
+\paragraph{Invariant analysis.} Prior work on invariant analysis major
+limitations that we aim to improve in our proposed work.  First, current
+invariant invariant approaches are primarily limited to either predefined
+templates~\cite{ernst:2009:daikon} or extraction of low-level invariants from
+program code~\cite{csallner:icse2008:dysy}.  While extraction of low-level
+invariants is a promising direction, we will develop techniques for inferring
+high-level invariants over module behavior and inter-module communication in
+the context of high-level module behavior summaries that are security-relevant
+-- i.e., useful for enforcing security properties such as isolation between
+modules with different privilege levels or belonging to distinct security
+principals.
+
+A second limitation of current invariant detection approaches is that they
+require either source code, bytecode, or binary programs compiled with
+debugging information.  In our work, we aim to extend invariant analysis to
+cover binary programs for which we do not have access to such information.
+This will require differential analysis of the memory of the program during
+execution at selected program points.  In addition, we will define algorithms
+to scope the differential program state analysis to the subset of memory that
+can be accessed by the current region of code -- e.g., the currently executing
+function.  Determining this memory subset will require incorporation of both
+static and dynamic information.
+
+Finally, we aim to address the restriction that current invariant analyses are
+primarily limited to the form of pre- and post-conditions on function or
+method invocations.  A major part of our work will include the identification
+and application of invariants in a fine-grained manner, where we will select
+critical points in the CFG using structural analysis to apply our invariants.
+As an example, using this approach we aim to discover program points such as
+loops over critical data structures, or switch tables that correspond to
+individual protocol state handlers
+
+\paragraph{Module interface enumeration.} Once a set of modules has been
+identified from the combination of the statically-derived CFG and runtime
+monitoring, the analysis platform will proceed to automatically identify the
+interfaces exposed by each module.  This step will take into account
+domain-specific knowledge regarding machine architecture -- e.g., to identify the use
+of special instructions that allow for control transfers between modules such
+as system call service invocations.  To enable richer semantic understanding
+of not only the vectors for entering a module, but also the types of data that
+accompanies these control transfers, the platform will leverage a combination
+of static and dynamic data-flow analyses to characterize the number and types
+of parameters for control transfers across modules.  In cases where memory is
+shared between modules, points-to analyses will be leveraged to characterize
+the data shared between modules and the sets of modules that contain
+references to particular memory objects.  For instance, returning to the
+example of an RTOS, our platform will be able to identify well-known
+structures such as process lists or memory descriptors as channels of
+information flow that serve as an \emph{implicit} interface between
+logically-distinct modules.
+
+\paragraph{Runtime monitoring.} The result of the previous phase will be a
+high-level structural model of the system under test in the form of a
+decomposition of independent models, a characterization of their function and
+behavior, and execution state invariants at critical program points.  This
+model will then be used by a runtime component that will monitor the execution
+of the deployed system. The monitoring component will use dynamic state
+introspection and will be protected from attacks against integrity using a
+robust isolation mechanism. Introspection will occur at carefully selected
+program points in order to balance behavioral coverage with performance
+requirements.
+
+Deviations from the model that are indicative of anomalous and potentially
+malicious factors will be detected and reported.  Additionally, due to the
+characterization analysis performed during model construction, reports will
+contain high-level information concerning \emph{why} the observed behavior is
+anomalous, leading to increased whole-system insight on the part of system
+analysts and operators.
 
 \section{Mitigating Software Backdoors}
 \label{sec:research:backdoors}

@@ -1,0 +1,9 @@
+syntax: re
+
+\.aux$
+\.bbl$
+\.blg$
+\.dep$
+\.log$
+\.out$
+\.pdf$
