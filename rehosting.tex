@@ -1,0 +1,175 @@
+The devices that surround us every day, from cars to coffee makers,
+contain complex software that has received little public examination.
+Because these devices are increasingly being connected to the internet,
+it is vital that their security be rigorously evaluated.
+
+To date, the analysis of embedded firmware has required source
+code~\cite{davidson:2013:fie}, used only static
+analysis~\cite{dreissen:2012:satphone}, or applied only to Linux-based
+firmware. Many advanced analyses (e.g., concolic
+execution~\cite{godefroid:2005:dart}, dynamic taint analysis, and
+fuzzing) require dynamic analysis. Embedded devices run a wide variety
+of operating systems (Windows CE, QNX, VxWorks, and Cisco IOS, to name
+but a few), and so to have broad impact we must find analyses that do
+not depend on a single operating system.
+
+To effectively support sophisticated dynamic analyses for real embedded
+systems, we need a platform that can run embedded firmware in a
+whole-system emulator such as \dynamicsys, allowing full visibility
+into all code running on the system. Although emulators such as QEMU
+support a large number of processors such as ARM, MIPS, and PowerPC, a
+given embedded device firmware will typically not run due to missing
+support for peripheral devices.
+
+Missing peripheral support poses an especially severe problem from a
+security standpoint. Because peripherals are the way embedded systems
+interact with the outside world, an analysis tool that cannot inspect
+the device drivers for the platform will miss most of the attack
+surface. In order to close this gap, we propose to develop automated
+techniques for building models of embedded peripherals that can then be
+used by \dynamicsys to run embedded firmware.
+
+\subsection{Assumptions and Prerequisites}
+
+Our proposed work makes the following assumptions:
+\begin{inparaenum}[i)]
+    \item it is possible to obtain a copy of the target firmware, e.g.
+    by extracting it from flash memory or via the manufacturer's update
+    tool;
+    \item the CPU architecture on which the firmware runs can be
+    determined, and the target emulator supports this CPU architecture;
+    and,
+    \item the load address and entry point of the firmware in memory can
+    be found.
+\end{inparaenum}
+
+We believe that these assumptions are reasonable for many consumer
+devices, and in any case solving these problems is orthogonal to the
+main task of firmware emulation.
+
+\subsection{Technical Approach: Software-Guided Emulation}
+
+Our key insight is that \emph{firmware itself contains a rough
+specification of the hardware on which it runs}: the checks and
+operations performed on hardware-supplied values can be interpreted as
+constraints on those same values. Thus when a poorly emulated piece of
+hardware misbehaves, the way the firmware acts in response can to
+some extent be used as an oracle for the correct behavior.
+
+To make this idea more concrete, consider an example where firmware
+reads a value from memory-mapped device memory and checks whether its
+value is less than \texttt{0x100}. If value returned by emulated
+hardware is greater than this value, the firmware may print an error
+message and halt. Upon detecting this error, our system could then infer
+the constraint and retry the emulation with a response that is in range
+and allows execution to continue.
+
+However, as this example makes clear, we need a way to detect when an
+emulated execution has gone astray. Also, iteratively finding
+conditionals in the firmware that relate to hardware constraints may be
+intractable computationally, as the search space is potentially
+exponential.
+
+To solve these problems, we propose to develop ways of inferring the
+actual device's execution path through the firmware image. For example,
+if the device has a serial port that produces debug messages, these
+strings can be matched within the firmware binary find the code that
+emits them. Thus, one can use a sequence of debugging messages as a
+``trail of breadcrumbs'' to infer a valid path through the firmware
+image. This means that the symbolic execution can likewise follow this
+path through the firmware, collecting constraints on the device inputs
+along the way.
+
+Additional research challenges remain, however. Although the process
+described above will work for simple peripherals, devices that keep
+complex state or that do computation of their own outside the CPU will
+be difficult to handle. In addition, the use of interrupts and direct
+memory access (DMA) by peripherals is not handled by this approach, and
+new advances are needed. We hope that by overcoming these research
+challenges we can arrive at a system which automatically generates
+reasonable device models for many peripherals, reducing the amount of
+manual reverse engineering required to a minimum.
+
+\subsection{Preliminary Results: Modeling Simple Devices}
+
+We have performed some initial investigation into this problem using the
+firmware of an ARM-based HP LaserJet 4050dn printer. On the device, we
+were able to locate a serial port, which provided a stream of boot
+messages to act as the ``breadcrumbs'' described in the previous
+section. We were also able to extract the firmware image from the
+devices and load it in \dynamicsys.
+
+By combining \dynamicsys with a symbolic execution engine and SAT
+solver, we were able to \emph{automatically} infer peripheral device
+models for many of the devices used in the early stages of boot,
+including the serial port and NVRAM configuration. Our automatically
+generated device models allow the system to partially boot, reproducing
+the real serial console output, until it reaches code that stops the
+system, waiting for an interrupt.
+
+For comparison, before trying to automatically generate peripheral
+device models we also attempted to create them by hand, a process which
+took several weeks to reach a similar state --- a sharp contrast with 
+the few minutes of computation required for our automated system. 
+
+These results indicate that the approach described in the previous
+section has the potential for reducing the work required to emulate an
+embedded firmware, but many interesting research problems are still
+unsolved.
+
+%For example, one could use JTAG to create a device snapshot that
+%could be revived in QEMU, allowing the analysis described above to skip
+%over potentially complex device initialization code and more quickly get
+%to the business of testing the attack surface of the device.
+%Alternatively, JTAG could be used to sample the device's execution,
+%allowing direct comparison with the emulated version; this ``trail of
+%breadcrumbs'' could even be used as input to a constraint solver that to
+%identify what device inputs are needed to reach the sampled code
+%paths.\footnote{This last approach draws on techniques recently proposed
+%by Jin and Orso~\cite{Jin2012} to reproduce software failures seen in
+%the field.}
+
+%. Many embedded devices
+%support IEEE 1149.1, the Standard Test Access Port and Boundary-Scan
+%Architecture~\cite{jtag}, more commonly known as JTAG. The JTAG
+%interface of many embedded devices offers some amount of debugging
+%support, and allows one to halt the processor, read memory and CPU
+%state, and so on. Such information could be used by an automated
+%rehosting solution in a number of ways, as we detail below.
+%
+%First and most trivially, the ability to peek into the runtime state of
+%a correctly functioning device would allow features such as the location
+%and contents of the firmware to be determined directly, which would make
+%the initial phase of the procedure described above more efficient.
+%
+%The JTAG interface could also be used to sample the execution of the
+%real device during boot. This would provide a ``trail of breadcrumbs''
+%that the emulator could then follow. When the boot fails in the
+%emulator, these sample points could guide the search for a solution.
+%For example, if the emulated boot hangs in a loop while waiting for an
+%interrupt from a non-existent device, the execution samples might
+%indicate that the next code to be executed lies in an interrupt handler,
+%which would allow the rehosting assistant to create a stub that asserts
+%the appropriate interrupt. Similarly, if the rehosting assistant notices
+%a divergence between the real and emulated executions, an SMT solver
+%could be employed to find a device input that would cause the emulated
+%execution to reach the sampled points. This latter strategy has been
+%successfully used to by Jin and Orso~\cite{Jin2012} to reproduce
+%failures seen in the field based on execution samples from the failing
+%host.
+%
+%Finally, if it is known that the code of interest is active after the
+%boot process has finished, the JTAG interface could be used to extract a
+%snapshot of the memory and CPU state from the device, which might then
+%be loaded into the emulator. Execution could then resume inside the
+%emulator, allowing device driver code to be tested without going through
+%the trouble of implementing the correct responses to the device
+%initialization code. The system may, of course, still hang or crash due
+%to missing device support, at which point the same strategies outlined
+%earlier could be employed; however, supporting the post-boot behavior of
+%the embedded peripherals (XXX: go back and use the word peripherals
+%more) may prove to be a simpler task. Being able to skip ahead to the
+%post-boot phase also has the advantage that it quickly allows an
+%analysis to inspect the device code that would be most exposed during
+%actual use.
+%
