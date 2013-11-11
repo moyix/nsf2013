@@ -1,0 +1,94 @@
+Existing work on reverse engineering binary code has typically focused
+on decompilation~\cite{schwartz:2013:decomp,cifuentes:1995:decomp}.
+However, for quickly understanding the behavior and capabilities of a
+program, source code may not be the most efficient representation.
+Instead, one may desire \emph{semantically meaningful summaries} of
+parts of a program or execution trace. For example, portions of an
+execution might be summarized as ``argument parsing'',
+``serialization'', or ``encryption''.
+
+This kind of high-level labeling is often performed implicitly by human
+reverse engineers as they analyze a program. One may glance over the
+functions in a binary to get a rough idea of their purpose before
+deciding where to spend one's (limited) analysis time. We propose to
+build a system that can quickly provide these kinds of high-level
+semantic summaries \emph{automatically}. 
+
+To accomplish this, we propose to look to the area of streaming
+analytics. Previous work from Georgia Tech~\cite{dolangavitt:2013:tzb}
+has demonstrated that viewing a program execution as a large number of
+streaming memory accesses, combined with an analysis of the contents of
+these streams, can be a powerful tool for program explication. This
+notion can be extended beyond memory accesses to other artifacts of
+computation, effectively treating an execution as a generator for
+streams of observations of the program's state. By collecting statistics
+on these streams and comparing them to a corpus of labeled exemplars, we
+will be able to classify execution fragments according to high-level
+semantic descriptions.
+
+\subsection{Programs as Streaming Data}
+
+To perform a high-level labeling, we need to generate a set of
+observations about the behavior of portions of program execution both in
+the training corpus and for new executions we wish to understand. In
+previous work~\cite{dolangavitt:2013:tzb}, this took the form of streams
+of data from memory accesses. In our proposed system, we will augment
+these with a number of other observables, for example:
+
+\begin{itemize}
+    \item System, API, and function calls
+    \item CPU register contents over time
+    \item Assembly instruction mnemonics in a sliding window over the
+    instruction stream
+    \item Externally visible outputs such as disk, network, and IPC
+\end{itemize}
+
+Each of these can be combined with its context within the program (i.e.,
+the module as identified by our structural decomposition and the calling
+context) to break up these data streams. The key idea is that these
+sub-streams will now contain data that is of the same semantic type, as
+each is generated from within the same part of the program. Taken
+together, the content of these streams should thus form a fingerprint
+for the code's functionality. Some streams may be noisier than others,
+but creating robust classifiers from noisy signals is a well-studied
+problem in machine learning.
+
+\subsection{Creating a Labeled Corpus}
+
+A natural approach to creating a labeled corpus of program functionality
+is to manually examine many programs and assign meaningful labels to
+their various components. Aside from the daunting amount of work this
+would require to build a reasonably-sized corpus, this strategy is also
+inherently underspecified. Any labeling effort would need to decide
+\emph{a priori} on a consistent set of labels, but the diversity of
+real-world program behaviors means any such label set would likely be
+incomplete.
+
+Instead we propose to generate our corpus from precisely the semantic
+information that is usually removed during compilation: comments and
+variable names. Naturally, these labels will not be as precise as those
+a human would create, but in aggregate they should provide valuable
+information on the meaning of the code in question.
+
+Thus, to create a corpus one can start by compiling a large number of
+open source programs with debugging information. The resulting binary
+code can then be given labels derived from the comments and variable
+names. Finally, the programs can then be run in \dynamicsys to create
+the streams of observations that will be used in classification.
+
+\subsection{Classifying Execution Fragments}
+
+Given a new execution, we can now generate the same streams of
+observations as for the exemplar corpus. These observations can then be
+matched against the models generated in training to find those that most
+closely match. The output is a labeled instruction stream that assigns
+\emph{meaning} to execution fragments.
+
+This problem can also be seen as a statistical machine translation
+problem with three parallel corpora: the comments and variable names in
+the code, the binary code produced from compilation, and the streams of
+observations produced by running the code. The first two are explicitly
+related via the source code to binary mapping produced by compilation.
+The latter two can be seen as implicitly related by some noisy channel. 
+Using techniques from machine translation, we can find a mapping between
+the first and third, giving us the desired semantic labeling.
