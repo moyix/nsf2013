@@ -50,33 +50,96 @@
 \section{Data Management Plan}
 \label{sec:dmp}
 
+In the following, we describe the plan for managing the data used and produced
+as part of the proposed project.
+
 \subsection{Project Description}
 \label{sec:dmp:desc}
+
+The goal of this project is to investigate techniques and implement tools for
+automated whole-system understanding of closed-source software systems.  The
+project leverages a scalable and precise dynamic analysis framework that operates
+directly over binary code to enable automatic structure decomposition and generate
+behavioral models and program summaries.  The system will facilitate applications
+such as the proposed encrypted protocol fuzzing capability.
 
 \subsection{Survey of Existing Data}
 \label{sec:dmp:survey}
 
+The project will require the acquisition, storage, and analysis of closed-source
+software systems such as embedded firmware and user-level programs in binary form.
+The collection process will respect the relevant software licenses and intellectual
+property agreements covering these artifacts.
+
 \subsection{Data to be Created}
 \label{sec:dmp:created}
+
+Analysis of the software artifacts to be collected will result in execution
+traces, behavior models, and other derived summaries regarding the properties
+of those artifacts.  The project will likely result in the discovery of
+previously unknown vulnerabilities and potentially exploits for those
+vulnerabilities.  Extreme caution will be exercised in order to prevent the
+leakage of this information to unauthorized parties, and responsible
+disclosure practices will be followed when notifying relevant parties of our
+findings.
 
 \subsection{Data Administration Issues}
 \label{sec:dmp:admin}
 
 \subsubsection*{Funding and Legislative Requirements}
 
+All prototypes produced in the course of this project will be licensed under
+an appropriate open source license, and copyright will be assigned if requested.
+
+As noted above, licensing and intellectual property agreements will be respected
+in all aspects of the project.
+
 \subsubsection*{Data Owners and Stakeholders}
+
+All data sets created as part of this project will be considered in the public
+domain, and will be responsibly disclosed to interested researchers if
+requested, unless legal agreements such as a non-disclosure agreement prevent
+this.
 
 \subsubsection*{File Formats and Standards}
 
+Data will be collected and stored in accessible formats, and the necessary
+code to manipulate the data will be provided upon request.  Source code for
+the tools developed will be published in standard source code repositories
+such as subversion, git, or mercurial.
+
 \subsubsection*{Access and Security}
+
+Access to all data will be strictly monitored and controlled.  Write access to
+repositories of test artifacts, generated data, and project source code will
+be restricted to collaborators and affiliated research personnel.  Read-only
+access will be provided as needed, in accordance with the data sharing
+requirements outlined above.
 
 \subsection{Data Organization Methods}
 
 \subsubsection*{Backups}
 
+Standard services for automated backups and off-site replication will be
+leveraged for the project data.  Data that is not under the direct physical
+control of an authorized project collaborator will be encrypted using standard
+best practices.
+
 \subsubsection*{Other}
 
+Source code for all research prototypes will be published using standard
+source code repository software.  As a consequence, revision history will
+be maintained for all software developed as part of the project.
+
 \subsection{Data Sharing and Archiving}
+
+Data will be publically sharable to appropriate parties if it is accordance
+with legal requirements.  Data will be shared using standard network-based
+mechanisms appropriate to the situation -- e.g., published via a web server
+or provided via an encrypted channel.
+
+All data will be archived for a period of at least seven years following
+the completion of the project.
 
 \subsection{Responsibilities}
 
