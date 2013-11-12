@@ -27,7 +27,7 @@
 \usepackage{todonotes}
 \usepackage{paralist}
 
-\newcommand{\basetitle}{TWC: Medium: Automated Reverse Engineering of Commodity Software}
+\newcommand{\basetitle}{TWC: Medium: Collaborative: Automated Reverse Engineering of Commodity Software}
 \newcommand{\thetitle}{\basetitle\xspace}
 \newcommand{\dynamicsys}{\textsc{DynamicSystem}\xspace}
 \newcommand{\challenge}[1]{\paragraph{Research Challenge:} \emph{#1}}
@@ -63,11 +63,11 @@ Software, including common examples such as commercial applications or
 embedded device firmware, is often delivered as closed-source binaries.  While
 prior academic work has examined how to automatically discover vulnerabilities
 in binary software, and even how to automatically craft exploits for these
-vulnerabilities, answering basic security-relevant questions about
-closed-source software remains difficult.  For instance, ideally one would
-like to know whether software contains malicious functionality; whether it
-contains obfuscated code or protocols indicative of malicious behavior; what
-security properties does this software intend to provide; and, whether one can
+vulnerabilities, the ability to answer basic security-relevant questions about
+closed-source software remains elusive.  For instance, ideally one would like
+to know whether software contains malicious functionality; whether it contains
+obfuscated code or protocols indicative of malicious behavior; what security
+properties does this software intend to provide; and, whether one can
 recognize when software is deviating from normal, intended behavior at
 runtime.
 
@@ -102,12 +102,12 @@ understanding of closed-source software.
 \paragraph{Intellectual Merit.} Reverse engineering is a critical capability
 for understanding and responding to software-borne threats, and can enable
 deep system understanding towards automated hardening of existing
-closed-source platforms.  However, reverse engineering currently entails the training
-of highly-skilled security professionals, as well as significant manual
-effort, both processes that do not scale to meet the current needs of industry
-and government.  The automated techniques and tools we will develop in the
-course of this research will lay the groundwork for meeting this need, as well
-as enable new automatic hardening and threat response capabilities.
+closed-source platforms.  However, reverse engineering currently entails the
+training of highly-skilled security professionals, as well as significant
+manual effort, both processes that do not scale to meet the current needs of
+industry and government.  The automated techniques and tools we will develop
+in the course of this research will lay the groundwork for meeting this need,
+as well as enable new automatic hardening and threat response capabilities.
 
 \paragraph{Broader Impacts.} The research proposed herein will have a
 significant impact outside of the security research community.  We will
@@ -136,8 +136,64 @@ defensive tool capabilities in operational environments.
 \section{Research Overview}
 \label{sec:overview}
 
-\subsection{Project Goals and Scope}
-\label{sec:overview:goals}
+Software is predominantly distributed in the form of closed-source software,
+from embedded device firmware to full-fledged commercial applications.  While
+distribution of software as binary artifacts is convenient for developers and
+provides a measure of protection for intellectual property rights, it is also
+a significant obstacle to improving the security of our systems and the
+Internet.  Traditional approaches to program understanding and security
+analysis are greatly impeded by the loss of metadata such as debugging
+symbols, type annotations, and structure that occurs when source code is
+compiled into binary form.  Therefore, many analysis and hardening techniques
+developed under the assumption of availability of source code are ineffective
+when this assumption is violated.
+
+In recognition of this problem, prior academic work has investigated binary
+analyses of closed-source software to recover this
+metadata~\cite{lee:ndss2011:tie}, identify vulnerabilities, harden existing
+platforms~\cite{chipounov:asplos2011:s2e}, and even to automatically generate
+exploits for detected vulnerabilities~\cite{kruegel:sec2005:mimicry,avgerinos:ndss2011:aeg,schwartz:sec2011:q,cha:oakland2012:mayhem}.
+However, answering basic security-relevant questions about closed-source
+software remains difficult.  For instance, ideally only would like to be
+able to ascertain%
+\begin{inparaenum}[\itshape a\upshape)]
+    \item whether software contains hidden malicious functionality;
+    \item whether it contains obfuscated code or protocols indicative of malicious behavior;
+    \item what security properties does this software intend to provide; and,
+    \item whether one can recognize when software is deviating from normal, intended behavior at runtime.
+\end{inparaenum}
+
+Recent discoveries of embedded backdoors in commodity devices illustrate this
+point well.  In several cases over the past few years, hidden backdoors with
+hardcoded authentication credentials have been found in devices such as
+routers~\cite{heffner:dlink-dir100} and printers~\cite{cert:hp-backdoor} that
+are intended to allow for remote administration by support staff.  However,
+these backdoors could also easily be abused by attackers that either privately
+discover these backdoors after disclosure to the public.  Identifying the
+presence of such backdoors entails a painstaking process of manual reverse
+engineering by skilled analysts, and there is currently no systematic,
+automated means to accomplish this on the scale required to achieve assurance
+that an organization's deployed devices are free of such vulnerabilities.
+
+In general, the capability to automatically and efficiently reverse engineer
+closed-source software to produce a high-level understanding of its security
+characteristics and runtime behavior is highly desirable.  To that end, this
+project aims to develop this capability through novel research and development
+of a dynamic analysis framework for this specific purpose.  In particular, we
+propose to achieve the following goals:%
+\begin{inparaenum}[\itshape a\upshape)]
+    \item scalable whole-system dynamic analysis of closed-source software;
+    \item structural decomposition and inference of software module boundaries and interfaces at a sub-process granularity;
+    \item semantic understanding of the behavior of these modules through concise behavioral summaries; and,
+    \item concrete applications on top of this foundation, such as automatic identification of encrypted protocol implementations in closed-source software.
+\end{inparaenum}
+
+In the following, we expound upon the project goals and scope, enumerate
+specific research challenges that will be overcome, and summarize the
+anticipated project outcomes and deliverables.
+
+% \subsection{Project Goals and Scope}
+% \label{sec:overview:goals}
 
 \subsection{Embedded Firmware Emulation}
 \label{sec:overview:firmware}
@@ -189,9 +245,7 @@ defensive tool capabilities in operational environments.
 \section{Structural Decomposition}
 \label{sec:research:structure}
 
-\cite{csallner:icse2008:dysy}
-\cite{krka:icsa2010:inference}
-\cite{chipounov:asplos2011:s2e}
+% \cite{chipounov:asplos2011:s2e}
 
 When analyzing software, it is often uncommon to have access to the source
 code of the program of interest.  Manually finding vulnerabilities or
@@ -205,8 +259,8 @@ Systems like \dynamicsys provide a solid basis for developing analyses of this
 sort.
 
 Given the capability to perform precise static and dynamic data-flow analysis
-on binaries, it becomes possible to answer higher-level questions such as:
-\begin{inparaenum}[i)]
+on binaries, it becomes possible to answer higher-level questions such as:%
+\begin{inparaenum}[\itshape a\upshape)]
     \item what are the distinct modules that comprise the program or system,
     \item what are the interfaces that these modules expose to their environment,
     \item what are the information flows between these modules, and
@@ -559,86 +613,9 @@ closed-source systems.
 \bibliographystyle{acm}
 \bibliography{satc}
 
-\newpage
-\pagenumbering[F]{bychapter}
-\setcounter{page}{1}
-\setcounter{section}{0}
-
 % \newpage
-% \pagenumbering[H]{bychapter}
+% \pagenumbering[F]{bychapter}
 % \setcounter{page}{1}
 % \setcounter{section}{0}
-
-% {\sffamily\bfseries
-% \begin{center}
-% \fontsize{16}{16}\selectfont Facilities, Equipment, and Other Resources
-
-% \fontsize{13}{13}\selectfont \thetitle
-% \end{center}
-% \label{sec:resources}
-% }
-
-% \section*{Northeastern University}
-
-% Northeastern University is a private research university in Boston and a
-% leader in integrating classroom learning with real-world experience.
-% Northeastern has eight colleges and offers undergraduate majors in 65
-% departments. At the graduate level, the university offers more than 125
-% programs and awards masters, doctoral, and professional degrees.
-% Northeastern's 73-acre award winning campus is the home of more than 35
-% specialized research and education centers.  Northeastern has significant
-% depth in terms of faculty and research strengths in the areas of systems and
-% systems security. In 2010, Northeastern University received a \$12 million
-% gift from one of its alumni, George J.~Kostas, E'43, H'07, to build a secure,
-% state-of-the-art homeland security research facility on the university's
-% Burlington campus. The new George J.~Kostas Research Institute for Homeland
-% Security, a multi-story building, has been designed in accordance with US
-% government standards for secure facilities and gives Northeastern the capacity
-% and clearances to conduct secure research in a restricted environment. Within
-% the building, sensitive, interdisciplinary research takes place in areas
-% critical to national security, including cryptography, data security, systems
-% security, information assurance, detection of explosives, and energy
-% harvesting.  The College of Engineering and the College of Computer and
-% Information Science also have programs in cyber infrastructure protection,
-% networks, algorithms, and languages.
-
-% The environment at Northeastern University offers a unique opportunity for the
-% PIs to carry out this project.  The proposed research directions complement
-% well the existing strengths in multiple areas of computer science, including
-% networks (Guevara Noubir, Alan Mislove, Christo Wilson, and David Choffnes),
-% systems (Peter Desnoyers and Gene Cooperman), algorithms (Rajmohan Rajaraman),
-% formal methods (Pete Manolios and Thomas Wahl), and programming languages
-% (Matthias Felleisen, Mitch Wand, Olin Shivers).
-
-% \section*{Georgia Tech}
-
-% The Georgia Tech Information Security Center (GTISC) is located in the Klaus
-% Advanced Computing Building and is comprised of the Information Security Lab
-% and the Voice Over IP (VOIP) Lab.  GTISC operates a substantial number of
-% network, computational server and storage resources  to support its research
-% activities in the area information security.
-
-% Georgia Tech's state-of-the-art network provides capabilities with few
-% parallels in academia or industry, delivering unique and sustained competitive
-% advantage to Georgia Tech faculty, students, and staff. Since the mid-80’s
-% Georgia Tech and OIT have provided instrumental leadership in high-performance
-% networks for research and education (R\&E) regionally, nationally, and
-% internationally.  A founding member of Internet2 (I2) and National LambdaRail
-% (NLR) – high bandwidth networks dedicated to the needs of the research and
-% education community – Georgia Tech manages and operates Southern Crossroads
-% (SoX, the I2 regional GigaPOP) and Southern Light Rail (SLR, the NLR regional
-% aggregation). We work within six Southeastern states to make affordable high-
-% performance network access and network services available to researchers and
-% faculty at Georgia Tech, their collaborators, other higher-education systems,
-% K-12 systems, and beyond.  Georgia Tech's network has high-performance
-% connectivity to other members of the research and education community
-% world-wide through dual 10 gbps (gigabits per second) links to SoX/SLR, which
-% has peerings with NLR Packetnet, Internet2 Network, TransitRail, Oak Ridge
-% National Labs (ORNL), the Department of Energy's Energy Sciences Network
-% (ESNet), NCREN, NASA's NREN, MREN, FLR, Peachnet, LONI, 3ROX, as well as other
-% SoX participants in the Southeast.  In addition to the exceptional R\&E
-% network connectivity provided to all Georgia Tech faculty, students, and
-% staff, dedicated bandwidth in support of specific collaborations and research
-% is also possible.
 
 \end{document}
