@@ -64,21 +64,22 @@ embedded device firmware, is often delivered as closed-source binaries.  While
 prior academic work has examined how to automatically discover vulnerabilities
 in binary software, and even how to automatically craft exploits for these
 vulnerabilities, answering basic security-relevant questions about
-closed-source software remains difficult.  For instance, ideally one would like to
-know whether software contains malicious functionality; whether it contains
-obfuscated code or protocols indicative of malicious behavior; what security
-properties does this software intend to provide; and, whether one can
+closed-source software remains difficult.  For instance, ideally one would
+like to know whether software contains malicious functionality; whether it
+contains obfuscated code or protocols indicative of malicious behavior; what
+security properties does this software intend to provide; and, whether one can
 recognize when software is deviating from normal, intended behavior at
 runtime.
 
-This project aims to provide algorithms and tools for answering these questions.
-Leveraging prior work on emulator-based dynamic analyses, we propose techniques
-for scaling this high-fidelity analysis to capture and extract whole-system
-behavior in the context of embedded device firmware.  Using a combination of
-dynamic execution traces collected from this analysis platform and binary code
-analysis techniques, we propose techniques for automated structural analysis of
-closed-source software, decomposing system and user-level programs into logical
-modules through inference of high-level semantic behavior.  This decomposition
+This project aims to provide algorithms and tools for answering these
+questions. Leveraging prior work on emulator-based dynamic analyses, we
+propose techniques for scaling this high-fidelity analysis to capture and
+extract whole-system behavior in the context of embedded device firmware and
+closed-source applications.  Using a combination of dynamic execution traces
+collected from this analysis platform and binary code analysis techniques, we
+propose techniques for automated structural analysis of binary program
+artifacts, decomposing system and user-level programs into logical modules
+through inference of high-level semantic behavior.  This decomposition
 provides as output an automatically learned description of the interfaces and
 information flows between each module at a sub-program granularity.
 
@@ -87,15 +88,16 @@ engineering task may require a \emph{semantic} understanding as well. Building
 on emulation-based dynamic analysis and structural decomposition as a
 foundation, we will develop automated techniques for producing high-level
 summaries of whole system executions and software components, allowing reverse
-engineers to quickly get human-readable labels like ``encryption'' or ``file
+engineers to quickly obtain human-readable labels like ``encryption'' or ``file
 parsing'' for modules and functions.
 
-Finally, as an application of our framework for whole-system understanding, we
-propose techniques for automating the reverse engineering of encrypted network
-protocols commonly used by malware to obfuscate their communication with
-command-and-control servers.
-
-\todo[inline]{Expand introduction.}
+Finally, as an example application of our framework for whole-system
+understanding, we propose techniques for automating the reverse engineering of
+encrypted network protocols commonly used by malware to obfuscate their
+communication with command-and-control servers.  However, we envision that the
+techniques and analysis platform developed as part of this project will find
+wide application in the area of automated reverse engineering and behavioral
+understanding of closed-source software.
 
 \paragraph{Intellectual Merit.} Reverse engineering is a critical capability
 for understanding and responding to software-borne threats, and can enable
