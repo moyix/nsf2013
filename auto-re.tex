@@ -346,12 +346,35 @@ features chosen, we will need to carefully evaluate different feature sets.
 
 \subsection{Encrypted Protocol Fuzzing}
 \label{sec:overview:fuzzing}
+Based on the structural decomposition and software execution summarization work 
+described in the previous sections, we will study how to apply fuzz testing to 
+the undocumented and encrypted protocols, with a goal to discover previously 
+unknown software vulnerabilities.  We plan to develop a smart fuzzing platform 
+that can cope with binary programs that use encrypted protocols (such as instant messengers). 
 
-\challenge{CHALLENGE}
+\challenge{Can we  generate syntactically correct but semantically incorrect data?}
 
-\challenge{CHALLENGE}
+Upon receiving input messages, such a program usually applies a sequence of data 
+transformations (such as decryption and decompression) to the input data and then 
+continue handling transformed data. Without knowing the specification of the input protocols, 
+constructing an input that can pass all the transformations is pretty challenging. 
+Based on the observation that such a program usually also contains the inverse transformations 
+in order to support the bidirectional communication, we propose to use the program 
+itself as a malformed data producer. By reusing the program's inverse transformations 
+and introducing data mutations to the process of the inverse transformations,
+we expect to generate the syntactically correct but semantically incorrect data. 
 
-\challenge{CHALLENGE}
+
+\challenge{Can we automatically identify the inverse data transformation functions?}
+
+To find the inverse data transformations (e.g., compression and encryption) in binary programs, 
+we plan to combine the high-level data buffer identification with the program module identification results together, 
+and construct the data-buffer flow graph that is used to indicate which data buffers are flowing into which 
+the exposed interfaces of each module. By identifying the source of the data based on
+multi-source taint tracking, we can introduce different fuzzing primitives to the data sources and then produce the final messages.
+
+
+%\challenge{CHALLENGE}
 
 \subsection{Outcomes and Deliverables}
 \label{sec:overview:outcomes}
