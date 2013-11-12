@@ -233,7 +233,7 @@ in an emulator. Thus, as an additional research task we will need to develop
 ways of automatically generating code for \dynamicsys that emulates the
 peripheral.
 
-\challenge{Evaluating Emulation Accuracy}
+\challenge{Is the resulting emulation correct?}
 
 Because our models will be derived from the embedded firmware, there may be
 aspects that do not match the real hardware. This raises the question of how
@@ -302,11 +302,44 @@ module classes.
 \subsection{Summarizing Software Execution}
 \label{sec:overview:autosummary}
 
-\challenge{CHALLENGE}
+Building on the low-level structural decomposition and dynamic invariant
+detection work described in the previous section, we will examine the question
+of whether \emph{high-level semantic summaries} of execution can be
+automatically created for previously unseen software. These kinds of summaries
+could be enormously valuable for explicating the behavior of software, and
+could vastly speed up the work of reverse engineering. For example, by looking
+at a summary of program behavior that includes ``input parsing'', a reverse
+engineer can immediately know where he should focus his efforts to find flaws
+in input handling.
 
-\challenge{CHALLENGE}
+\challenge{What should high-level descriptions of execution look like?}
 
-\challenge{CHALLENGE}
+Although we have given a brief example of what a portion of a summary might
+look like, it is difficult to generalize this to arbitrary execution. As we
+argue in Section~\ref{sec:research:autosummary}, handwritten labels are likely
+to be inaccurate or incomplete, and in any case are difficult to scale to
+a large software corpus. Instead we will investigate automatic semantic
+labeling by training on open source software, for which high-level semantic
+information such as comments, variable names, and documentation is available.
+
+\challenge{Can these high-level summaries be automatically learned?}
+
+Given a corpus of existing software that is somehow annotated with its
+high-level semantics, it is not obvious that there is a way to classify the
+execution of new software. We propose to investigate using dynamic features of
+the software as it executes in order to generate a set of observations for use
+in machine learning. This is a natural fit for implementation within
+\dynamicsys, which supports easily instrumenting whole-system execution on a
+variety of platforms and architectures.
+
+\challenge{What features are appropriate for learning semantic summaries?}
+
+There are many possible features one could extract about a program from a
+dynamic execution. For example, streams of data from memory accesses have
+been examined in recent work~\cite{dolangavitt:2013:tzb}, and in
+Section~\ref{sec:research:autosummary} we discuss other possible features.
+Given that the success of machine learning approaches depends heavily on the
+features chosen, we will need to carefully evaluate different feature sets.
 
 \subsection{Encrypted Protocol Fuzzing}
 \label{sec:overview:fuzzing}
