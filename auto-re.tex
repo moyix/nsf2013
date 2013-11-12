@@ -81,14 +81,15 @@ modules through inference of high-level semantic behavior.  This decomposition
 provides as output an automatically learned description of the interfaces and
 information flows between each module at a sub-program granularity.
 
-Using emulation-based dynamic analysis and structural decomposition as a
-foundation, we will develop specific applications of this framework for
-whole-system understanding.  As one application, we propose techniques for
-automated detection and mitigation of software backdoors in embedded devices
-such as SOHO routers, a recent example of which is the backdoor discovered in
-the D-Link DIR-100 rev.~A broadband router~\cite{heffner:dlink-dir100}.
+In addition to a \emph{structural} understanding of software, a reverse
+engineering task may require a \emph{semanic} understanding as well. Building
+on emulation-based dynamic analysis and structural decomposition as a
+foundation, we will develop automated techniques for producing high-level
+summaries of whole system executions and software components, allowing reverse
+engineers to quickly get human-readable labels like ``encryption'' or ``file
+parsing'' for modules and functions.
 
-As a second application of our framework for whole-system understanding, we
+Finally, as an application of our framework for whole-system understanding, we
 propose techniques for automating the reverse engineering of encrypted network
 protocols commonly used by malware to obfuscate their communication with
 command-and-control servers.
