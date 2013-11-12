@@ -188,8 +188,8 @@ propose to achieve the following goals:%
     \item concrete applications on top of this foundation, such as automatic identification of encrypted protocol implementations in closed-source software.
 \end{inparaenum}
 
-In the following, we enumerate specific research challenges that will be
-overcome, describe related work in the academic literature, and summarize the
+In the following, we elaborate upon the main research thrusts of this project,
+enumerate specific research challenges that will be overcome and summarize the
 anticipated project outcomes and deliverables.
 
 % \subsection{Project Goals and Scope}
@@ -207,11 +207,60 @@ anticipated project outcomes and deliverables.
 \subsection{Structural Decomposition}
 \label{sec:overview:structure}
 
-\challenge{CHALLENGE}
+A second thrust of this project will be the development of novel techniques
+for structurally decomposing closed-source software into its constituent
+modules.  Building upon the scalable, whole-system analysis platform provided
+by \dynamicsys, structural decomposition entails discovery of not only the
+boundaries of modules that comprise an otherwise opaque binary artifact, but
+also the interfaces and information flows between these modules.  We envision
+accomplishing this through the use of architecture-specific domain knowledge
+and precise static and dynamic data flow analysis that characterizes not only
+the flows themselves, but also the range of possible values that can flow along
+a path.
 
-\challenge{CHALLENGE}
+In addition, we will develop novel dynamic invariant inference techniques that
+allow our system to characterize and establish bounds on the normal behavior
+of individual modules.  This will enable the capability to detect deviations
+from normal behavior during runtime, as well as the potential to infer high-level
+semantic behavior from low-level features.
 
-\challenge{CHALLENGE}
+As a final component of this thrust, we will investigate efficient binary
+rewriting techniques to implement inline detection of deviations from inferred
+invariants, and optional enforcement of normal behavior.
+
+Achieving these goals requires surmounting several key research challenges.
+
+\challenge{Can we reliably recover module boundaries from binary artifacts?}
+
+Distinguishing module boundaries is a daunting task in and of itself.  However,
+prior work has demonstrated that such techniques are possible in the case of
+user-level applications~\cite{bittau:nsdi2008:wedge}.  We plan to extend these
+techniques using a novel set of program and architectural features to a whole-system
+setting, enabled by our dynamic analysis platform.
+
+\challenge{Can we achieve high coverage of realistic system inputs to infer useful invariants?}
+
+Critical to any dynamic analysis approach is the question of coverage. Despite
+their advantages in terms of precision, without careful consideration, dynamic
+analyses can fail to exercise critical sections of code that could lead to
+missed vulnerabilities and exploits, or an incomplete characterization of
+program behavior in the context of this project.  To ameliorate this risk, we
+plan to incorporate symbolic execution and automated theorem proving -- e.g.,
+SMT solvers -- to generate new test inputs from seed inputs that broaden the
+coverage of our dynamic analysis.
+
+\challenge{Can we recover useful higher-level semantic information from inferred invariants?}
+
+Dynamic invariant inference has been demonstrated to be highly useful in
+highlighting important assumptions of low-level program characteristics, such
+as function pre- and post-conditions.  However, it is an open question as to
+whether low-level invariants can be used to infer higher-level semantics with
+respect to program behavior.  Overcoming this challenge will require careful
+selection of the invariants that correspond to different high-level data
+structures and known classes of software behaviors.  We plan to derive a
+systematic mapping between classes of invariants through a combination of
+domain knowledge and automated learning from known examples of different
+module classes.
 
 \subsection{Mitigating Software Backdoors}
 \label{sec:overview:backdoors}
@@ -245,8 +294,6 @@ anticipated project outcomes and deliverables.
 \section{Structural Decomposition}
 \label{sec:research:structure}
 
-% \cite{chipounov:asplos2011:s2e}
-
 When analyzing software, it is often uncommon to have access to the source
 code of the program of interest.  Manually finding vulnerabilities or
 malicious behavior in binary programs is time-consuming, error-prone, and
@@ -254,9 +301,9 @@ typically requires allocating highly-experienced reverse engineers to the
 task. Therefore, it is desirable to have precise and scalable program analyses
 of native binary executables to discover vulnerabilities or malicious
 components of these programs, render benign applications more resilient to
-known classes of attack, and to deep insight into a system's runtime state.
-Systems like \dynamicsys provide a solid basis for developing analyses of this
-sort.
+known classes of attack, and gain deep insight into a system's runtime state.
+Emulator-based dynamic analysis systems such as \dynamicsys provide a solid
+basis for developing analyses of this sort.
 
 Given the capability to perform precise static and dynamic data-flow analysis
 on binaries, it becomes possible to answer higher-level questions such as:%
@@ -282,10 +329,9 @@ perform fine-grained, instruction-level, dynamic analysis.  The resulting
 execution traces allow the platform to perform advanced data-flow analyses
 that refine the statically-derived CFG.  Using these program analyses, we will
 then extract behavioral models of the program under test that can be compared
-to a
-\emph{minimal} specification of its expected behavior.  This capability will
-allow our platform to automatically decompose a set of binary executables into
-their constituent logical modules, as well as identify both direct and
+to a \emph{minimal} specification of its expected behavior.  This capability
+will allow our platform to automatically decompose a set of binary executables
+into their constituent logical modules, as well as identify both direct and
 indirect communication channels with other modules and the external
 environment.
 
