@@ -154,7 +154,7 @@ metadata~\cite{lee:ndss2011:tie}, identify vulnerabilities~\cite{kruegel:acsac20
 platforms~\cite{baliga:gibraltar,chipounov:asplos2011:s2e}, and even to automatically generate
 exploits for detected vulnerabilities~\cite{kruegel:sec2005:mimicry,avgerinos:ndss2011:aeg,schwartz:sec2011:q,cha:oakland2012:mayhem}.
 However, answering basic security-relevant questions about closed-source
-software remains difficult.  For instance, ideally only would like to be
+software remains difficult.  For instance, ideally one would like to be
 able to ascertain%
 \begin{inparaenum}[\itshape a\upshape)]
     \item whether software contains hidden malicious functionality;
@@ -169,11 +169,12 @@ hardcoded authentication credentials have been found in devices such as
 routers~\cite{heffner:dlink-dir100} and printers~\cite{cert:hp-backdoor} that
 are intended to allow for remote administration by support staff.  However,
 these backdoors could also easily be abused by attackers that either privately
-discover these backdoors after disclosure to the public.  Identifying the
-presence of such backdoors entails a painstaking process of manual reverse
-engineering by skilled analysts, and there is currently no systematic,
-automated means to accomplish this on the scale required to achieve assurance
-that an organization's deployed devices are free of such vulnerabilities.
+discover these backdoors or exploit them after disclosure to the public.
+Identifying the presence of such backdoors entails a painstaking process of
+manual reverse engineering by skilled analysts, and there is currently no
+systematic, automated means to accomplish this on the scale required to
+achieve assurance that an organization's deployed devices are free of such
+vulnerabilities.
 
 In general, the capability to automatically and efficiently reverse engineer
 closed-source software to produce a high-level understanding of its security
@@ -189,8 +190,8 @@ propose to achieve the following goals:%
 \end{inparaenum}
 
 In the following, we elaborate upon the main research thrusts of this project,
-enumerate specific research challenges that will be overcome and summarize the
-anticipated project outcomes and deliverables.
+enumerate specific research challenges that will be overcome, and summarize
+the anticipated project outcomes and deliverables.
 
 % \subsection{Project Goals and Scope}
 % \label{sec:overview:goals}
@@ -210,7 +211,7 @@ We propose instead to tackle the core problem of running embedded firmware in
 an emulator by automating the creation of emulated peripherals. To do so we
 will make use of the key insight that many properties of the underlying
 hardware can be derived from the way the firmware interacts with it. Our goal
-is to reduce the amount of manual labor needed to support emulation a new
+is to reduce the amount of manual labor needed to support emulation of a new
 embedded platform to a minimum.
 
 \challenge{Can we accurately infer the range of expected values and
@@ -230,8 +231,8 @@ generate an emulated device that operates well enough to run the embedded firmwa
 Having derived a specification for the behavior of an embedded peripheral, we
 would like to avoid having to manually write code that implements the behavior
 in an emulator. Thus, as an additional research task we will need to develop
-ways of automatically generating code for \dynamicsys that emulates the
-peripheral.
+ways of automatically generating code for \dynamicsys, our existing platform
+for scalable and precise dynamic analysis, that emulates the peripheral.
 
 \challenge{Is the resulting emulation correct?}
 
@@ -311,7 +312,7 @@ of whether \emph{high-level semantic summaries} of execution can be
 automatically created for previously unseen software. These kinds of summaries
 could be enormously valuable for explicating the behavior of software, and
 could vastly speed up the work of reverse engineering. For example, by looking
-at a summary of program behavior that includes ``input parsing'', a reverse
+at a summary of program behavior that includes ``input parsing,'' a reverse
 engineer can immediately know where he should focus his efforts to find flaws
 in input handling.
 
@@ -346,35 +347,32 @@ features chosen, we will need to carefully evaluate different feature sets.
 
 \subsection{Encrypted Protocol Fuzzing}
 \label{sec:overview:fuzzing}
-Based on the structural decomposition and software execution summarization work 
-described in the previous sections, we will study how to apply fuzz testing to 
-the undocumented and encrypted protocols, with a goal to discover previously 
-unknown software vulnerabilities.  We plan to develop a smart fuzzing platform 
-that can cope with binary programs that use encrypted protocols (such as instant messengers). 
 
-\challenge{Can we  generate syntactically correct but semantically incorrect data?}
+Based on the structural decomposition and software execution summarization work
+described in the previous sections, we will study how to apply fuzz testing to
+the undocumented and encrypted protocols, with a goal to discover previously
+unknown software vulnerabilities.  We plan to develop a smart fuzzing platform
+that can cope with binary programs that use encrypted protocols (such as instant messengers).
 
-Upon receiving input messages, such a program usually applies a sequence of data 
-transformations (such as decryption and decompression) to the input data and then 
-continue handling transformed data. Without knowing the specification of the input protocols, 
-constructing an input that can pass all the transformations is pretty challenging. 
-Based on the observation that such a program usually also contains the inverse transformations 
-in order to support the bidirectional communication, we propose to use the program 
-itself as a malformed data producer. By reusing the program's inverse transformations 
+\challenge{Can we generate syntactically correct but semantically incorrect data?}
+
+Upon receiving input messages, such a program usually applies a sequence of data
+transformations (such as decryption and decompression) to the input data and then
+continue handling transformed data. Without knowing the specification of the input protocols,
+constructing an input that can pass all the transformations is challenging.
+Based on the observation that such a program usually also contains the inverse transformations
+in order to support bidirectional communication, we propose to use the program
+itself as a malformed data producer. By reusing the program's inverse transformations
 and introducing data mutations to the process of the inverse transformations,
-we expect to generate the syntactically correct but semantically incorrect data. 
-
+we expect to generate the syntactically correct but semantically incorrect data.
 
 \challenge{Can we automatically identify the inverse data transformation functions?}
 
-To find the inverse data transformations (e.g., compression and encryption) in binary programs, 
-we plan to combine the high-level data buffer identification with the program module identification results together, 
-and construct the data-buffer flow graph that is used to indicate which data buffers are flowing into which 
+To find the inverse data transformations (e.g., compression and encryption) in binary programs,
+we plan to combine the high-level data buffer identification with the program module identification results,
+and construct the data-buffer flow graph that is used to indicate which data buffers are flowing into which of
 the exposed interfaces of each module. By identifying the source of the data based on
 multi-source taint tracking, we can introduce different fuzzing primitives to the data sources and then produce the final messages.
-
-
-%\challenge{CHALLENGE}
 
 \subsection{Outcomes and Deliverables}
 \label{sec:overview:outcomes}
@@ -400,9 +398,9 @@ implements the techniques we describe herein.
 The analysis and characterization of binary program artifacts has seen
 increasing attention in recent years due to the widespread recognition of such
 analyses as a needed capability.  One fundamental problem in developing
-program analyses for binary programs is the lack of metadata such as debugging
-symbols, type annotations, and program structure present in source code.
-One effort that has investigated addressing this lack of information is
+program analyses for binary code is the lack of metadata such as debugging
+symbols, type annotations, and program structure present in source code. One
+effort that has investigated addressing this lack of information is
 TIE~\cite{lee:ndss2011:tie}, which proposes an approach to infer type
 information from binaries using constraint solving.  Recent work has also
 studied the recovery of structural information from executables to scale
@@ -464,16 +462,15 @@ in binary artifacts.
 \section{Structural Decomposition}
 \label{sec:research:structure}
 
-When analyzing software, it is often uncommon to have access to the source
-code of the program of interest.  Manually finding vulnerabilities or
-malicious behavior in binary programs is time-consuming, error-prone, and
-typically requires allocating highly-experienced reverse engineers to the
-task. Therefore, it is desirable to have precise and scalable program analyses
-of native binary executables to discover vulnerabilities or malicious
-components of these programs, render benign applications more resilient to
-known classes of attack, and gain deep insight into a system's runtime state.
-Emulator-based dynamic analysis systems such as \dynamicsys provide a solid
-basis for developing analyses of this sort.
+Manually finding vulnerabilities or malicious behavior in binary programs is
+time-consuming, error-prone, and typically requires allocating
+highly-experienced reverse engineers to the task. Therefore, it is desirable
+to have precise and scalable program analyses of native binary executables to
+discover vulnerabilities or malicious components of these programs, render
+benign applications more resilient to known classes of attack, and gain deep
+insight into a system's runtime state. Emulator-based dynamic analysis systems
+such as \dynamicsys provide a solid basis for developing analyses of this
+sort.
 
 Given the capability to perform precise static and dynamic data-flow analysis
 on binaries, it becomes possible to answer higher-level questions such as:%

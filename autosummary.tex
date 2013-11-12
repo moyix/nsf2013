@@ -4,15 +4,15 @@ However, for quickly understanding the behavior and capabilities of a
 program, source code may not be the most efficient representation.
 Instead, one may desire \emph{semantically meaningful summaries} of
 parts of a program or execution trace. For example, portions of an
-execution might be summarized as ``argument parsing'',
-``serialization'', or ``encryption''.
+execution might be summarized as ``argument parsing,''
+``serialization,'' or ``encryption.''
 
 This kind of high-level labeling is often performed implicitly by human
 reverse engineers as they analyze a program. One may glance over the
 functions in a binary to get a rough idea of their purpose before
 deciding where to spend one's (limited) analysis time. We propose to
 build a system that can quickly provide these kinds of high-level
-semantic summaries \emph{automatically}. 
+semantic summaries \emph{automatically}.
 
 To accomplish this, we propose to look to the area of streaming
 analytics. Previous work from Georgia Tech~\cite{dolangavitt:2013:tzb}
@@ -89,6 +89,6 @@ problem with three parallel corpora: the comments and variable names in
 the code, the binary code produced from compilation, and the streams of
 observations produced by running the code. The first two are explicitly
 related via the source code to binary mapping produced by compilation.
-The latter two can be seen as implicitly related by some noisy channel. 
+The latter two can be seen as implicitly related by some noisy channel.
 Using techniques from machine translation, we can find a mapping between
 the first and third, giving us the desired semantic labeling.

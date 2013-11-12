@@ -21,19 +21,19 @@ support a large number of processors such as ARM, MIPS, and PowerPC, a
 given embedded device firmware will typically not run due to missing
 support for peripheral devices.
 
-Missing peripheral support poses an especially severe problem from a
-security standpoint. Because peripherals are the way embedded systems
-interact with the outside world, an analysis tool that cannot inspect
-the device drivers for the platform will miss most of the attack
-surface. In order to close this gap, we propose to develop automated
-techniques for building models of embedded peripherals that can then be
-used by \dynamicsys to run embedded firmware.
+Missing peripheral support poses an especially severe problem from a security
+standpoint. Because peripherals are the means by which embedded systems
+interact with the outside world, an analysis tool that cannot inspect the
+device drivers for the platform will miss most of the attack surface. In order
+to close this gap, we propose to develop automated techniques for building
+models of embedded peripherals that can then be used by \dynamicsys to run
+embedded firmware.
 
 \subsection{Assumptions and Prerequisites}
 
 Our proposed work makes the following assumptions:%
 \begin{inparaenum}[\itshape a\upshape)]
-    \item it is possible to obtain a copy of the target firmware, e.g.
+    \item it is possible to obtain a copy of the target firmware, e.g.,
     by extracting it from flash memory or via the manufacturer's update
     tool;
     \item the CPU architecture on which the firmware runs can be
@@ -52,7 +52,7 @@ main task of firmware emulation.
 Our key insight is that \emph{firmware itself contains a rough
 specification of the hardware on which it runs}: the checks and
 operations performed on hardware-supplied values can be interpreted as
-constraints on those same values. Thus when a poorly emulated piece of
+constraints on those same values. Thus, when a poorly emulated piece of
 hardware misbehaves, the way the firmware acts in response can to
 some extent be used as an oracle for the correct behavior.
 
