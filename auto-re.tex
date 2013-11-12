@@ -479,26 +479,76 @@ analysts and operators.
 \section{Broader Impact and Educational Outreach}
 \label{sec:impact}
 
+The lack of insight into closed-source software such as embedded firmware and
+commercial applications limit the abilities of security analysts and tools to
+detect malicious behavior and harden vulnerable software.  The techniques and
+tools developed by this project will help to remedy this situation, by
+giving specialists and organizations the necessary capabilities to perform
+these tasks.  Since such software is pervasive in the modern Internet and
+within targeted organizations, the results of this project will result in
+safer systems and a more secure Internet.
+
 \subsection{Curriculum Development}
 \label{sec:impact:curriculum}
+
+The novel research to be performed as part of this project will have a direct
+impact on the undergraduate and graduate curricula of Northeastern University
+and the Georgia Institute of Technology.  PIs Kirda and Robertson are both
+directly responsible for teaching efforts in systems and network security at
+Northeastern, and will directly transfer the knowledge gained in the course
+of this project to the classroom.  PI Wang is similarly well-placed to ensure
+that this research will enrich the security curriculum at Georgia Tech.
+
+Outside of the classroom, both institutions are deeply involved in practical
+educational efforts in security -- e.g., Capture-the-Flag (CTF) competitions --
+that help to train students and outside participants in real-world security
+tools and techniques.  The results of this research will also inform these
+efforts.
 
 \subsection{Education and Outreach}
 \label{sec:impact:education}
 
-% \subsection{Technology Transfer and Dissemination}
-% \label{sec:impact:tech-transfer}
+Aside from curriculum development, all PIs are actively engaged in many
+collaborations within the wider security community, including other academic
+groups, industry, and the government.  As such, the research performed in this
+project will enjoy wide dissemination through this network in the form of
+collaborations, talks, published papers, and scientific visits.
 
 \section{Project Time Plan}
 \label{sec:time-plan}
 
-\paragraph{Year 1.}
+Work on the proposed project will adhere to the following annual schedule.
+With each goal, we will aim to publish our results in top- tier systems
+security venues, and publicly release our prototypes and data -- in accordance
+with our data management plan -- for testing and adoption by the community.
 
-\paragraph{Year 2.}
+\paragraph{Year 1.} The primary goal of the first year will be to adapt our
+prior work on emulation-based dynamic analysis to scale to entire systems in
+support the subsequent work to be performed as part of this project. We will
+also define and enumerate the low-level features we will use in this project
+to infer software and system module boundaries in closed-source software, as
+well as whole-system behavioral summaries. Additionally, we will begin the
+integration into the framework of our static analysis engine and dynamic
+symbolic analyzer to support the extraction of behavioral models.  Finally, we
+will collect a representative sample of binary program artifacts to evaluate
+our techniques against.
 
-\paragraph{Year 3.}
+\paragraph{Year 2.} In the second year, we will continue to develop the
+analysis framework, concentrating on researching novel techniques for behavior
+summarization and structural inference.  In particular, we will focus on
+extending the state of the art in dynamic invariant learning.  We will also
+begin applying the techniques and analysis framework to applications such
+as the proposed encrypted protocol fuzzing approach.
 
-\section{Qualifications of the PIs and Previous NSF Support}
-\label{sec:qualifications}
+\paragraph{Year 3.} The final year of the project will include further
+development of the analysis platform.  In particular, we will incorporate
+techniques for automated enforcement of learned normal behavior defined by
+inferred invariants and behavioral models.  We will also investigate other
+applications of the whole-system dynamic analysis framework for securing
+closed-source systems.
+
+% \section{Qualifications of the PIs and Previous NSF Support}
+% \label{sec:qualifications}
 
 \newpage
 \pagenumbering[E]{bychapter}
