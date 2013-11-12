@@ -29,7 +29,7 @@
 
 \newcommand{\basetitle}{TWC: Medium: Collaborative: Automated Reverse Engineering of Commodity Software}
 \newcommand{\thetitle}{\basetitle\xspace}
-\newcommand{\dynamicsys}{\textsc{DynamicSystem}\xspace}
+\newcommand{\dynamicsys}{\textsc{PANDA}\xspace}
 \newcommand{\challenge}[1]{\paragraph{Research Challenge:} \emph{#1}}
 
 \pagestyle{scrheadings}
@@ -273,7 +273,10 @@ Distinguishing module boundaries is a daunting task in and of itself.  However,
 prior work has demonstrated that such techniques are possible in the case of
 user-level applications~\cite{bittau:nsdi2008:wedge}.  We plan to extend these
 techniques using a novel set of program and architectural features to a whole-system
-setting, enabled by our dynamic analysis platform.
+setting, enabled by our dynamic analysis platform.  The intuition behind our
+approach is that software engineering practices dictate modularization of
+programs and system composition, and that this structure remains present,
+though obfuscated, in derived binary artifacts.
 
 \challenge{Can we achieve high coverage of realistic system inputs to infer useful invariants?}
 
@@ -283,8 +286,8 @@ analyses can fail to exercise critical sections of code that could lead to
 missed vulnerabilities and exploits, or an incomplete characterization of
 program behavior in the context of this project.  To ameliorate this risk, we
 plan to incorporate symbolic execution and automated theorem proving -- e.g.,
-SMT solvers -- to generate new test inputs from seed inputs that broaden the
-coverage of our dynamic analysis.
+SMT solvers~\cite{demoura:tacas2008:z3,zheng:fse2013:z3str} -- to generate new test inputs from
+seed inputs that broaden the coverage of our dynamic analysis.
 
 \challenge{Can we recover useful higher-level semantic information from inferred invariants?}
 
@@ -320,8 +323,82 @@ module classes.
 \subsection{Outcomes and Deliverables}
 \label{sec:overview:outcomes}
 
+The overall outcome we anticipate for this project is to produce automated
+tools and techniques that improve the ability of security analysts to
+automatically reverse engineer and recover high-level behavior of
+closed-source software.  The primary measure of success with respect to the
+research produced will be the demonstrated improvement in throughput and
+precision resulting from automation of what is currently tedious and
+error-prone manual work by skilled analysts.  The long-term outcome that we
+hope to achieve is a safer next generation of systems, and higher assurance in
+the systems that are already deployed.
+
+Deliverables of this project will not only include the dissemination of
+research publications in top-tier systems security venues, but also the
+development of a prototype whole-system dynamic analysis platform that
+implements the techniques we describe herein.
+
 \section{State of the Art and Previous Work}
 \label{sec:related}
+
+The analysis and characterization of binary program artifacts has seen
+increasing attention in recent years due to the widespread recognition of such
+analyses as a needed capability.  One fundamental problem in developing
+program analyses for binary programs is the lack of metadata such as debugging
+symbols, type annotations, and program structure present in source code.
+One effort that has investigated addressing this lack of information is
+TIE~\cite{lee:ndss2011:tie}, which proposes an approach to infer type
+information from binaries using constraint solving.  Recent work has also
+studied the recovery of structural information from executables to scale
+program analysis~\cite{schwartz:2013:decomp}.
+
+Prior work has also investigated the application of binary analysis to
+vulnerability and exploit detection in closed-source programs.  For instance,
+early work examined static techniques for detecting attempts to load kernel
+rootkits by analysis of the module binary object prior to
+loading~\cite{kruegel:acsac2004:kernel}.  Subsequent work has examined various
+applications of binary analysis along these lines, such as detecting
+polymorphic worms by extracting and analyzing binaries from the
+network~\cite{kruegel:raid2005:worm}. Binary analysis has also found
+widespread use in malware analysis to characterize low-level malware and
+combat various evasion techniques used by malware
+authors~\cite{moser:ssp2007:malware,bayer:ndss2009:malware,sharif:ssp2009:malware}.
+Automated binary analysis has also found use in the generation of exploit
+signatures and retrofitting binary programs with untrusted input
+filters~\cite{newsome:ssp2005:filter,brumley:ssp2006:filter,brumley:csf2007:filter}.
+
+On the other hand, researchers have long speculated that binary analysis could
+be used to improve the capabilities of the attacker.  Along those lines,
+recent efforts have investigated different techniques to automate the
+process of automated exploit generation~\cite{avgerinos:ndss2011:aeg,schwartz:sec2011:q,cha:oakland2012:mayhem}.
+
+Recent work has examined the use of dynamic analysis platforms to provide
+introspection into runtime behavior.  PANDA proposed the notion of system
+taps to enable high-performance, fine-grained insight into the runtime
+execution of low-level code~\cite{dolangavitt:2013:tzb}.  S2E has made
+progress towards whole-system dynamic analysis of closed-source software,
+although they have to date focused on preventing lower-level vulnerabilities
+in such software~\cite{chipounov:asplos2011:s2e}.
+
+Several efforts have investigated inference of higher-level program behavior.
+One line of work has studied automated protocol understanding through either
+static or dynamic analysis of binary
+artifacts~\cite{caballero:ccs2007:polyglot,wondracek:ndss2008:protocol}.  The
+software engineering community has also investigated techniques to learn
+models of low-level software behavior either through invariant inference
+systems like Daikon, FSAs, or combinations of the two
+approaches~\cite{ernst:2009:daikon,csallner:icse2008:dysy,krka:icsa2010:inference}.
+
+Our project is novel with respect to prior work in several ways.  First, our
+aim is to advance the state of the art in scalable and precise emulated whole-
+system dynamic analysis, developing capabilities to handle low-level firmware
+for which we might not have a complete hardware specification up to full-
+fledged commercial applications.  We will also develop novel invariant
+inference and behavior summarization techniques that enable higher-level
+semantic understanding of program behavior.  Finally, we will demonstrate
+these enabling advances by applying this framework to the problem of
+automatically identifying encrypted network protocol implementations contained
+in binary artifacts.
 
 \section{Embedded Firmware Emulation}
 \label{sec:research:firmware}
