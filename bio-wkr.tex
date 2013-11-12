@@ -1,0 +1,180 @@
+\documentclass[letterpaper,11pt]{scrartcl}
+
+\PassOptionsToPackage{hang,small}{caption}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{subfig}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{fancyvrb}
+\usepackage{xspace}
+\usepackage{scrpage2}
+\usepackage{pgf,tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\usepackage{ulem}
+\normalem
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\defaultfontfeatures{Mapping=tex-text}
+\setromanfont[Ligatures={TeX}]{Times New Roman}
+\setsansfont[Ligatures={TeX}]{Helvetica Neue}
+\setmonofont[Scale=MatchLowercase]{Menlo}
+
+\usepackage[unicode,bookmarks,colorlinks,breaklinks,pdftitle={},pdfauthor={}]{hyperref}
+\hypersetup{linkcolor=black,citecolor=black,filecolor=black,urlcolor=black}
+
+\pagestyle{scrheadings}
+\clearscrheadfoot
+\lohead{\thetitle}
+\rohead{\pagemark}
+\lehead{\thetitle}
+\rehead{\pagemark}
+\setheadsepline{0.5pt}
+\setfootsepline{0pt}
+\setkomafont{pageheadfoot}{\sffamily\fontsize{9}{9}\selectfont}
+\setkomafont{pagenumber}{\sffamily\fontsize{9}{9}\selectfont}
+
+\newcommand{\thetitle}{TWC: Medium: Automated Reverse Engineering of Commodity Software\xspace}
+
+\begin{document}
+
+\title{Biographical Sketch}
+\subtitle{William Robertson}
+\author{}
+\date{}
+\maketitle
+
+\subsection*{Professional Preparation}
+
+\begin{tabularx}{\textwidth}{XXc}
+\toprule
+\sffamily\textbf{Institution} & \sffamily\textbf{Degree/Area} &
+    \sffamily\textbf{Year(s)}\\
+\midrule
+UC Santa Barbara & B.S., Computer Science & 1997--2002\\
+UC Santa Barbara & Ph.D., Computer Science & 2003--2009\\
+UC Berkeley & Postdoctoral Researcher & 2009--2011\\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Appointments}
+
+\begin{tabularx}{\textwidth}{XXc}
+\toprule
+\sffamily\textbf{Institution} & \sffamily\textbf{Position} &
+    \sffamily\textbf{Dates}\\
+\midrule
+Northeastern University & Assistant Professor & 2011--Present\\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Related Publications}
+
+\begin{enumerate}
+    \item Exploiting Execution Context for the Detection of Anomalous System Calls.
+    Darren Mutz, William Robertson, Giovanni Vigna, and Richard Kemmerer.
+    In Proceedings of the International Symposium on Recent Advances in Intrusion Detection (RAID).
+    Gold Coast, Queensland AUS, September 2007.
+    \item Polymorphic Worm Detection Using Structural Information of Executables.
+    Christopher Kruegel, Engin Kirda, Darren Mutz, William Robertson, and Giovanni Vigna.
+    In Proceedings of the International Symposium on Recent Advances in Intrusion Detection (RAID).
+    Seattle, WA USA, September 2005.
+    \item Automating Mimicry Attacks Using Static Binary Analysis.
+    Christopher Kruegel, Engin Kirda, Darren Mutz, William Robertson, and Giovanni Vigna.
+    In Proceedings of the USENIX Security Symposium.
+    Baltimore, MD USA, July 2005.
+    \item Detecting Kernel-Level Rootkits Through Binary Analysis.
+    Christopher Kruegel, William Robertson, and Giovanni Vigna.
+    In Proceedings of the Annual Computer Security Applications Conference (ACSAC).
+    Tuscon, AZ USA, December 2004.
+    \item Static Disassembly of Obfuscated Binaries.
+    Christopher Kruegel, William Robertson, Fredrik Valeur, and Giovanni Vigna.
+    In Proceedings of the USENIX Security Symposium.
+    San Diego, CA USA, August 2004.
+\end{enumerate}
+
+\subsection*{Other Publications}
+
+\begin{enumerate}
+    \item PatchDroid: Scalable Third-Party Patches for Android Devices.
+    Collin Mulliner, Jon Oberheide, William Robertson, and Engin Kirda.
+    To appear in Proceedings of the Annual Computer Security Applications Conference (ACSAC).
+    New Orleans, LA USA, December 2013.
+    \item PrivExec: Private Execution as an Operating System Service.
+    Kaan Onarlioglu, Collin Mulliner, William Robertson, and Engin Kirda.
+    In Proceedings of the IEEE Symposium on Security and Privacy (Oakland).
+    San Francisco, CA USA, May 2013.
+    \item TRESOR-HUNT: Attacking CPU-Bound Encryption.
+    Erik-Oliver Blass and William Robertson.
+    In Proceedings of the Annual Computer Security Applications Conference (ACSAC).
+    Orlando, FL USA, December 2012.
+    \item Effective Anomaly Detection with Scarce Training Data.
+    William Robertson, Federico Maggi, Christopher Kruegel, and Giovanni Vigna.
+    In Proceedings of the Network and Distributed System Security Symposium (NDSS).
+    San Diego, CA USA, February 2010.
+    \item Are Your Votes Really Counted? Testing the Security of Real-world Voting Systems.
+    Davide Balzarotti, Greg Banks, Marco Cova, Viktoria Felmetsger, William Robertson, Fredrik Valeur, Giovanni Vigna, and Richard Kemmerer.
+    In Proceedings of the International Symposium on Software Testing and Analysis (ISSTA).
+    Seattle, WA USA, July 2008.
+\end{enumerate}
+
+\subsection*{Synergistic Activities}
+
+Dr.~William Robertson is an assistant professor of Computer Science at
+Northeastern University in Boston, MA.  His research interests revolve around
+the security of the web, mobile devices, and operating systems. He was
+involved in both the California Top-to-Bottom-Review (TTBR) and the Ohio
+EVEREST projects as a Red Team member.  In this capacity, he demonstrated that
+electronic voting systems were potentially susceptible to large-scale attacks
+that could exploit numerous vulnerabilities in the firmware and physical
+security of the components of the voting system.  These findings led to
+significant changes in public policy in both states with respect to electronic
+voting, including restrictions or outright bans on the use of these systems.
+He is also involved in Lastline, Inc., a startup focused on the detection of
+advanced persistent threats and zero-day attacks that is based on the products
+of his and his collaborators' research.
+
+Dr.~Robertson also has extensive experience in organizing and participating in
+Capture-the-Flag (CTF) exercises.  With Shellphish, a team composed of
+UCSB-affiliated members, he won the 2005 edition of the DEFCON CTF
+competition.  He was also instrumental in helping to organize the UCSB iCTF,
+the largest distributed CTF competition, from its inception in 2003 to 2008.
+
+Dr.~Robertson was the program co-chair of the 2013 USENIX Workshop on
+Offensive Technologies (WOOT), co-located with USENIX Security.  He was the
+chair of the 2012 Conference on the Detection of Intrusions and Malware \&
+Vulnerability Assessment (DIMVA).  He has participated on the program
+committees of a number of top-tier systems security venues, including IEEE
+Security and Privacy, USENIX Security, and RAID.  He is also the author of
+more than twenty peer-reviewed journal and conference papers in the area of
+systems and network security.
+
+\subsection*{Collaborators and Other Affiliations}
+
+\noindent%
+Davide Balzarotti (Institute Eurecom),
+Leyla Bilge (Symantec Research Labs),
+Erik-Oliver Blass (Northeastern University),
+Ari Juels (RSA Labs),
+Engin Kirda (Northeastern University),
+Mohamed Kaafar (INRIA),
+Christopher Kruegel (UC Santa Barbara),
+Timothy Leek (MIT Lincoln Labs),
+Todd Letham (RSA Labs),
+Guevara Noubir (Northeastern University),
+Jon Oberheide (Duo Security),
+Alina Oprea (RSA Labs),
+Theodoor Scholte (SAP),
+Giovanni Vigna (UC Santa Barbara),
+Ting-Fang Yen (RSA Labs).
+
+\subsection*{Graduate Advisors and Postdoctoral Sponsors}
+
+Giovanni Vigna and Richard Kemmerer (UC Santa Barbara), David Wagner (UC Berkeley).
+
+\end{document}
