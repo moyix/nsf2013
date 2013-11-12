@@ -5,7 +5,7 @@ constructing them according to predefined generation rules, and then use
 the malformed inputs to test the target software. Despite the simplicity of
 the concept, fuzzing has proven very effective in uncovering previously
 unknown vulnerabilities in complex software. However, existing fuzzing
-technologies are hardly applied to undocumented and encrypted protocols,
+technologies are difficult to apply to undocumented and encrypted protocols,
 because the generated inputs do not satisfy integrity validation checks or
 become meaningless after being decrypted and are dropped.
 
@@ -22,10 +22,10 @@ reach the most vulnerable region.
 We propose to develop a smart fuzzing platform based on the
 \dynamicsys system and the module identification analysis, with the goal
 of coping with encrypted network protocols and improving the effectiveness
-of fuzzing.  Our intuition is that in order to support
+of fuzzing.  Our insight is that in order to support
 bidirectional communication, the programs (such as IM clients) capable
-of decrypting messages usually own the encryption capability at the same
-time.  By using dynamic data flow tracking and the module identification
+of decrypting messages also contain the ability to encrypt them.
+By using dynamic data flow tracking and the module identification
 analysis, we expect to identify the modules in a program that are
 responsible for message encryption and decryption. As a result, rather
 than constructing a malformed network packet from scratch, we
@@ -38,8 +38,8 @@ initialize a communication channel, we can introduce data mutation to the
 input buffer of the encryption function at runtime on one side and then send
 the encrypted message to the other side. In this case, the encrypted message
 would be completely accepted by the other side and reach a region of code that
-is more likely to be vulnerable.  Furthermore, during the process of how the
-IM client handles a correctly decrypted message, we can apply the dynamic data
-flow tracking technique to identify the input bytes that flow into security
-sensitive operations, meaning they are more likely to trigger vulnerabilities.
-Then we use this knowledge to guide the data mutation.
+is more likely to be vulnerable.  Furthermore, as the IM client handles a
+correctly decrypted message, we can apply the dynamic data flow tracking
+technique to identify the input bytes that flow into security sensitive
+operations, meaning they are more likely to trigger vulnerabilities.  We can
+then use this knowledge to guide the data mutation.

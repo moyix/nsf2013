@@ -231,8 +231,9 @@ generate an emulated device that operates well enough to run the embedded firmwa
 Having derived a specification for the behavior of an embedded peripheral, we
 would like to avoid having to manually write code that implements the behavior
 in an emulator. Thus, as an additional research task we will need to develop
-ways of automatically generating code for \dynamicsys, our existing platform
-for scalable and precise dynamic analysis, that emulates the peripheral.
+ways of automatically generating code for \dynamicsys~\cite{panda}, our
+existing platform for scalable and precise dynamic analysis, that emulates the
+peripheral.
 
 \challenge{Is the resulting emulation correct?}
 
@@ -358,7 +359,7 @@ that can cope with binary programs that use encrypted protocols (such as instant
 
 Upon receiving input messages, such a program usually applies a sequence of data
 transformations (such as decryption and decompression) to the input data and then
-continue handling transformed data. Without knowing the specification of the input protocols,
+continues handling transformed data. Without knowing the specification of the input protocols,
 constructing an input that can pass all the transformations is challenging.
 Based on the observation that such a program usually also contains the inverse transformations
 in order to support bidirectional communication, we propose to use the program
@@ -594,7 +595,7 @@ introduced by a (overly-conservative) widened symbolic jump target.
 
 Malicious code also often utilizes obfuscation techniques to hinder static
 analysis, such as overlapping instruction sequences as seen in variable length
-ISAs such as ix86, or switching between multiple supported ISAs as in the case
+ISAs such as x86, or switching between multiple supported ISAs as in the case
 of ARM and the Thumb family of instruction sets.  We will develop techniques
 to handle these classes of obfuscation.
 
