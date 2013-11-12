@@ -198,11 +198,48 @@ anticipated project outcomes and deliverables.
 \subsection{Embedded Firmware Emulation}
 \label{sec:overview:firmware}
 
-\challenge{CHALLENGE}
+For the vast majority of embedded platforms, there exists no public emulator
+that can run the native firmware. This poses a major hindrance to analysis of
+embedded software, because analyses must either be purely static, or the
+embedded device must support debugging instrumentation (e.g., JTAG). However,
+adding support to emulators for specific (undocumented) platforms is extremely
+time-consuming and performing this task manually cannot hope to scale to the
+thousands of embedded platforms that exist today.
 
-\challenge{CHALLENGE}
+We propose instead to tackle the core problem of running embedded firmware in
+an emulator by automating the creation of emulated peripherals. To do so we
+will make use of the key insight that many properties of the underlying
+hardware can be derived from the way the firmware interacts with it. Our goal
+is to reduce the amount of manual labor needed to support emulation a new
+embedded platform to a minimum.
 
-\challenge{CHALLENGE}
+\challenge{Can we accurately infer the range of expected values and
+behavior for an embedded peripheral?}
+
+To model an embedded peripheral, one must be able to answer a number of
+questions about its behavior. How should it respond when the CPU reads a value
+at a memory-mapped I/O range? When should its interrupts fire? If the device
+supports DMA, when and what should it read and write to main memory? We
+believe that for many peripherals, these questions can be answered by
+analyzing the firmware's interactions with it, and we plan to build a system
+that automates this task.
+
+\challenge{Once we have a model of the peripheral, can we automatically
+generate an emulated device that operates well enough to run the embedded firmware?}
+
+Having derived a specification for the behavior of an embedded peripheral, we
+would like to avoid having to manually write code that implements the behavior
+in an emulator. Thus, as an additional research task we will need to develop
+ways of automatically generating code for \dynamicsys that emulates the
+peripheral.
+
+\challenge{Evaluating Emulation Accuracy}
+
+Because our models will be derived from the embedded firmware, there may be
+aspects that do not match the real hardware. This raises the question of how
+we can be confident that tests carried out on our emulator reflect reality.
+Thus, to obtain confidence that our emulation is accurate, we plan to design a
+test regimen that compares real device execution to emulator behavior.
 
 \subsection{Structural Decomposition}
 \label{sec:overview:structure}
@@ -262,8 +299,8 @@ systematic mapping between classes of invariants through a combination of
 domain knowledge and automated learning from known examples of different
 module classes.
 
-\subsection{Mitigating Software Backdoors}
-\label{sec:overview:backdoors}
+\subsection{Summarizing Software Execution}
+\label{sec:overview:autosummary}
 
 \challenge{CHALLENGE}
 
